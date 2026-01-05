@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1100" viewBox="0 0 900 1100">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fffaf1"/>
+      <stop offset="1" stop-color="#fbf4e8"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="1100" fill="url(#bg)"/>
+  <rect x="60" y="60" width="780" height="980" rx="42" fill="none" stroke="rgba(43,32,24,0.22)" stroke-width="4"/>
+  <circle cx="450" cy="420" r="150" fill="rgba(180,76,42,0.14)" stroke="rgba(180,76,42,0.25)" stroke-width="3"/>
+  <rect x="260" y="610" width="380" height="260" rx="130" fill="rgba(47,111,115,0.12)" stroke="rgba(47,111,115,0.22)" stroke-width="3"/>
+  <text x="120" y="980" font-family="ui-serif, Georgia, 'Times New Roman', serif" font-size="46" fill="#2b2018" opacity="0.9">
+    个人形象占位图
+  </text>
+  <text x="120" y="1040" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="22" fill="#6c5a4d">
+    放一张带环境的半身照 / 高质量 3D 形象到 public/assets/avatars/
+  </text>
+</svg>
+

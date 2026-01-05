@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fffaf1"/>
+      <stop offset="1" stop-color="#fbf4e8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1400" height="900" fill="url(#bg)"/>
+  <rect x="70" y="70" width="1260" height="760" rx="32" fill="none" stroke="rgba(43,32,24,0.22)" stroke-width="4"/>
+
+  <g stroke="rgba(47,111,115,0.55)" stroke-width="6" fill="none" stroke-linecap="round">
+    <path d="M260 260h300"/>
+    <path d="M840 260h300"/>
+    <path d="M410 260v240"/>
+    <path d="M990 260v240"/>
+    <path d="M260 520h300"/>
+    <path d="M840 520h300"/>
+  </g>
+
+  <g fill="rgba(180,76,42,0.16)" stroke="rgba(180,76,42,0.35)" stroke-width="3">
+    <rect x="220" y="200" width="380" height="120" rx="18"/>
+    <rect x="800" y="200" width="380" height="120" rx="18"/>
+    <rect x="220" y="460" width="380" height="120" rx="18"/>
+    <rect x="800" y="460" width="380" height="120" rx="18"/>
+  </g>
+
+  <text x="150" y="700" font-family="ui-serif, Georgia, 'Times New Roman', serif" font-size="52" fill="#2b2018" opacity="0.92">
+    Figure：流程图/框架图占位
+  </text>
+  <text x="150" y="760" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="24" fill="#6c5a4d">
+    把你的图表放到 public/assets/research/，并在 content.json 里填写 figures
+  </text>
+</svg>
+
