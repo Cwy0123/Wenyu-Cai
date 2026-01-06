@@ -131,14 +131,12 @@
       <section class="dashboard container" id="dashboard">
         <div class="section__head">
           <h2 class="section__title">能力概览盘</h2>
-          <p class="section__desc">Bento Grid：把能力当作一个控制面板来呈现。</p>
         </div>
 
         <div class="bento" id="bento">
           <article class="tile tile--profile" id="tileProfile">
-            <div class="tile__title">Profile</div>
+            <div class="tileProfile__name tileProfile__name--title" id="tileName">你的名字</div>
             <div class="tile__body">
-              <div class="tileProfile__name" id="tileName">你的名字</div>
               <div class="tileProfile__tags" id="tileTags"></div>
               <div class="tileProfile__links actions" id="tileLinks"></div>
             </div>
