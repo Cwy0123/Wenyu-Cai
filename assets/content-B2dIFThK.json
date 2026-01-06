@@ -1,7 +1,6 @@
 {
   "site": {
     "title": "蔡文煜的作品集",
-    "name": "蔡文煜",
     "tagline": "用研究与分析驱动决策，用 AI 工具提升效率，用设计与内容讲好故事。",
     "description": "个人作品集：个人简介 + 五大能力（研究与分析、AI 工具应用、项目管理、内容策划与传播、视觉设计与创意）。",
     "contacts": [
@@ -17,7 +16,7 @@
     "photo": "/assets/avatars/个人简介图片.png",
     "cta": [
       { "label": "查看我的作品", "href": "#dashboard" },
-      { "label": "下载简历（PDF）", "href": "/assets/resume/resume.pdf" }
+      { "label": "下载文字简历（PDF）", "href": "/assets/resume/resume.pdf" }
     ]
   },
   "dashboard": {
