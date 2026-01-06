@@ -13,7 +13,7 @@
     "slogan": "连接数据与创意的复合型构建者",
     "sloganEn": "Bridging data & creativity",
     "bio": "我擅长把复杂问题拆解成可验证的假设，用研究与分析得出结论，再用 AI 工具与项目管理把方案落地，并通过内容与视觉把它讲清楚、讲好看。",
-    "photo": "/assets/avatars/个人简介图片.png",
+    "photo": "/assets/avatars/个人简介图片.png?v=20260106",
     "cta": [
       { "label": "查看我的作品", "href": "#dashboard" },
       { "label": "下载文字简历（PDF）", "href": "/assets/resume/resume.pdf" }
