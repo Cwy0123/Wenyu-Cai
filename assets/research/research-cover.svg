@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" fill="none">
+  <rect width="320" height="200" rx="12" fill="#F5F0E8"/>
+  <rect x="24" y="24" width="272" height="152" rx="8" fill="#E8E0D4" stroke="#D4C8B8" stroke-width="1"/>
+  <circle cx="80" cy="80" r="28" fill="#D4C8B8"/>
+  <rect x="130" y="60" width="140" height="12" rx="4" fill="#C8BAA8"/>
+  <rect x="130" y="84" width="100" height="10" rx="3" fill="#D4C8B8"/>
+  <rect x="130" y="104" width="120" height="10" rx="3" fill="#D4C8B8"/>
+  <rect x="40" y="130" width="240" height="30" rx="6" fill="#E0D6C8"/>
+  <text x="160" y="150" font-family="system-ui, sans-serif" font-size="12" fill="#8C7C68" text-anchor="middle">替换为你的研究封面图</text>
+</svg>
+

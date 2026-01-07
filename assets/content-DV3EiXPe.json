@@ -22,7 +22,8 @@
   "dashboard": {
     "research": {
       "kpi": { "label": "案例结论", "value": "+18.6%", "note": "示例：关键指标提升" },
-      "sparkline": [6, 8, 9, 7, 10, 12, 11, 13, 14, 16, 15, 18]
+      "sparkline": [6, 8, 9, 7, 10, 12, 11, 13, 14, 16, 15, 18],
+      "image": "/assets/research/research-cover.svg"
     },
     "ai": {
       "headline": "Cursor + Gemini + GPT ，缩短 80% 数据处理与图形绘制时间",
