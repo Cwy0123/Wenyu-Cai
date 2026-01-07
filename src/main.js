@@ -374,7 +374,7 @@ function templateDashboard() {
 
         <div class="bento" id="bento">
           <article class="tile tile--profile" id="tileProfile">
-            <div class="tileProfile__name tileProfile__name--title" id="tileName">cwy是这样</div>
+            <div class="tileProfile__name tileProfile__name--title" id="tileName">cwy的能量背包</div>
             <div class="tile__body">
               <div class="tileProfile__tags" id="tileTags"></div>
               <div class="tileProfile__links actions" id="tileLinks"></div>
@@ -383,22 +383,27 @@ function templateDashboard() {
 
           <article class="tile tile--research" id="tileResearch">
             <div class="tile__title">A. 研究与分析能力</div>
-            <div class="tile__body">
-              <div class="kpi">
-                <div class="kpi__label" id="researchKpiLabel">案例结论</div>
-                <div class="kpi__value" id="researchKpiValue">+18.6%</div>
-                <div class="kpi__note" id="researchKpiNote">示例：关键指标提升</div>
+            <div class="tile__body tile__body--split">
+              <div class="tile__left">
+                <div class="kpi">
+                  <div class="kpi__label" id="researchKpiLabel">案例结论</div>
+                  <div class="kpi__value" id="researchKpiValue">+18.6%</div>
+                  <div class="kpi__note" id="researchKpiNote">示例：关键指标提升</div>
+                </div>
+                <div class="sparkWrap" id="researchSpark"></div>
+                <div class="actions">
+                  <a class="btn btn--primary" href="${hrefWithPage('research')}">查看详情</a>
+                  <a class="btn" href="${hrefWithPage('research')}#paper">快速导览</a>
+                </div>
               </div>
-              <div class="sparkWrap" id="researchSpark"></div>
-              <div class="actions">
-                <a class="btn btn--primary" href="${hrefWithPage('research')}">查看详情</a>
-                <a class="btn" href="${hrefWithPage('research')}#paper">快速导览</a>
+              <div class="tile__right">
+                <img id="researchCoverImg" class="tile__cover" src="" alt="研究封面" loading="lazy" />
               </div>
             </div>
           </article>
 
           <article class="tile tile--ai" id="tileAi">
-            <div class="tile__title">B. AI 工具应用与创新能力</div>
+            <div class="tile__title">B. AI工具应用与创新能力</div>
             <div class="tile__body">
               <div class="aiHeadline" id="aiHeadline"></div>
               <div class="aiSub" id="aiSub"></div>
@@ -492,7 +497,7 @@ function templateSecondary(page) {
   }
   if (page === 'pm') {
     return templatePageShell({
-      title: '项目管理与执行力',
+      title: '组织规划与财务能力',
       desc: '用里程碑与交付成果证明推进能力。',
       bodyHtml: `
         <div class="divider divider--check" aria-hidden="true"></div>
@@ -788,6 +793,10 @@ loadContent()
         if (kpiNote) kpiNote.textContent = String(dash.research.kpi?.note ?? '')
         const spark = document.querySelector('#researchSpark')
         if (spark) spark.innerHTML = sparklineSvg(dash.research.sparkline)
+        const coverImg = document.querySelector('#researchCoverImg')
+        if (coverImg && dash.research.image) {
+          coverImg.src = withBase(dash.research.image)
+        }
       }
 
       if (dash?.ai) {

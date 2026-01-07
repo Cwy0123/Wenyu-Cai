@@ -508,6 +508,46 @@ a:hover {
     linear-gradient(0deg, rgba(47, 111, 115, 0.08), transparent);
 }
 
+/* 研究卡片左右分割布局 */
+.tile__body--split {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.tile__left {
+  flex: 1;
+  min-width: 0;
+}
+
+.tile__right {
+  flex: 0 0 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tile__cover {
+  width: 100%;
+  max-height: 260px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+}
+
+@media (max-width: 600px) {
+  .tile__body--split {
+    flex-direction: column;
+  }
+  .tile__right {
+    flex: none;
+    width: 100%;
+  }
+  .tile__cover {
+    max-height: 140px;
+  }
+}
+
 .tileProfile__name {
   font-family: var(--font_display);
   font-size: 20px;
@@ -673,7 +713,7 @@ a:hover {
 }
 
 .tile--visual {
-  grid-column: span 3;
+  grid-column: span 4;
   grid-row: span 2;
   border-color: rgba(180, 76, 42, 0.18);
 }
@@ -692,7 +732,7 @@ a:hover {
 }
 
 .tile--content {
-  grid-column: span 9;
+  grid-column: span 8;
 }
 
 .mag {
@@ -955,7 +995,7 @@ a:hover {
   align-items: end;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 18px;
+  margin-bottom: 12px;
 }
 
 .section__title {
