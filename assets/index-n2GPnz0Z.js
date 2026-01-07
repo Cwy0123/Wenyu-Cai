@@ -234,7 +234,7 @@
           </div>
           <div class="grid" id="aiGrid"></div>
         </section>
-      `}):a==="pm"?Ri({title:"项目管理与执行力",desc:"用里程碑与交付成果证明推进能力。",bodyHtml:`
+      `}):a==="pm"?Ri({title:"组织规划与财务能力",desc:"用里程碑与交付成果证明推进能力。",bodyHtml:`
         <div class="divider divider--check" aria-hidden="true"></div>
         <section class="section container" id="pm">
           <div class="section__head">
