@@ -22,6 +22,24 @@ export function initScrollAnimations() {
     })
   }
 
+  // Research secondary Bento tiles
+  const rTiles = document.querySelectorAll('.rTile')
+  if (rTiles.length) {
+    rTiles.forEach((tile) => {
+      gsap.from(tile, {
+        scrollTrigger: {
+          trigger: tile,
+          start: 'top 82%',
+          once: true
+        },
+        y: 12,
+        opacity: 0,
+        duration: 0.55,
+        ease: 'power2.out'
+      })
+    })
+  }
+
   // Section 标题与内容淡入上移
   const sections = document.querySelectorAll('.section')
   sections.forEach((section) => {

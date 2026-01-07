@@ -1,9 +1,85 @@
 import './styles.css'
 import { openModal } from './components/modal.js'
+import { openDrawer } from './components/drawer.js'
 import { initScrollAnimations } from './animations/scroll.js'
 
 const app = document.querySelector('#app')
 if (!app) throw new Error('#app not found')
+
+const BASE_URL = import.meta.env.BASE_URL || '/'
+
+function withBase(path) {
+  if (!path) return ''
+  const p = String(path)
+  // keep absolute URLs / anchors / special schemes
+  if (
+    p.startsWith('http://') ||
+    p.startsWith('https://') ||
+    p.startsWith('#') ||
+    p.startsWith('mailto:') ||
+    p.startsWith('tel:')
+  ) {
+    return p
+  }
+  // allow users to write /assets/... in content.json; we will prefix BASE_URL
+  const clean = p.replace(/^\/+/, '')
+  return new URL(clean, window.location.origin + BASE_URL).toString()
+}
+
+function normalizeContactHref(href) {
+  const h = String(href || '').trim()
+  if (!h) return ''
+  if (h.startsWith('http://') || h.startsWith('https://') || h.startsWith('mailto:') || h.startsWith('tel:'))
+    return h
+  if (h.includes('@')) return `mailto:${h}`
+  // naive phone normalization: digits/+/spaces/- only
+  if (/^[+\d][\d\s-]+$/.test(h)) return `tel:${h.replace(/\s+/g, '')}`
+  return h
+}
+
+function isStaticContact(contact) {
+  const label = String(contact?.label || '').trim()
+  return label === '电话' || label === '邮箱'
+}
+
+function renderContacts(contacts = []) {
+  if (!Array.isArray(contacts) || contacts.length === 0) return ''
+
+  const staticOnes = contacts.filter((c) => isStaticContact(c))
+  const linkOnes = contacts.filter((c) => !isStaticContact(c))
+
+  const staticHtml = staticOnes.length
+    ? `
+      <div class="contactGrid">
+        ${staticOnes
+          .map(
+            (c) => `
+              <div class="miniCard">
+                <div class="miniCard__label">${escapeHtml(c.label)}</div>
+                <div class="miniCard__value">${escapeHtml(c.href)}</div>
+              </div>
+            `
+          )
+          .join('')}
+      </div>
+    `
+    : ''
+
+  const linkHtml = linkOnes.length
+    ? `
+      <div class="actions">
+        ${linkOnes
+          .map(
+            (c) =>
+              `<a class="btn" href="${escapeHtml(normalizeContactHref(c.href))}" target="_blank" rel="noreferrer">${escapeHtml(c.label)}</a>`
+          )
+          .join('')}
+      </div>
+    `
+    : ''
+
+  return staticHtml + linkHtml
+}
 
 async function loadContent() {
   const res = await fetch(new URL('./content/content.json', import.meta.url))
@@ -27,7 +103,7 @@ function renderLinks(links = []) {
       ${links
         .map(
           (l) =>
-            `<a class="btn" href="${escapeHtml(l.href)}" target="_blank" rel="noreferrer">${escapeHtml(l.label)}</a>`
+            `<a class="btn" href="${escapeHtml(withBase(l.href))}" target="_blank" rel="noreferrer">${escapeHtml(l.label)}</a>`
         )
         .join('')}
     </div>
@@ -137,10 +213,10 @@ function renderGallery(containerId, items) {
             it.image
               ? `<div style="margin-top: 12px">
                    <button class="imgBtn" type="button"
-                     data-img="${escapeHtml(it.image)}"
+                     data-img="${escapeHtml(withBase(it.image))}"
                      data-alt="${escapeHtml(it.title ?? '作品')}"
                      data-caption="${escapeHtml(it.meta ?? '')}">
-                     <img src="${escapeHtml(it.image)}" alt="${escapeHtml(it.title ?? '作品')}" loading="lazy" style="width:100%; height: 220px; object-fit: cover; border-radius: 14px; border: 1px solid var(--border);" />
+                     <img src="${escapeHtml(withBase(it.image))}" alt="${escapeHtml(it.title ?? '作品')}" loading="lazy" style="width:100%; height: 220px; object-fit: cover; border-radius: 14px; border: 1px solid var(--border);" />
                    </button>
                  </div>`
               : ''
@@ -151,11 +227,6 @@ function renderGallery(containerId, items) {
     .join('')
 }
 
-function getLayout() {
-  const layout = new URLSearchParams(window.location.search).get('layout')
-  return layout === 'classic' ? 'classic' : 'dashboard'
-}
-
 function getPage() {
   const page = new URLSearchParams(window.location.search).get('page')
   if (!page) return null
@@ -163,15 +234,8 @@ function getPage() {
   return ok.has(page) ? page : null
 }
 
-function hrefWithLayout(layout) {
-  const url = new URL(window.location.href)
-  url.searchParams.set('layout', layout)
-  return url.pathname + url.search + url.hash
-}
-
 function hrefWithPage(page) {
   const url = new URL(window.location.href)
-  url.searchParams.set('layout', 'dashboard')
   url.searchParams.set('page', page)
   url.hash = ''
   return url.pathname + url.search + url.hash
@@ -179,7 +243,6 @@ function hrefWithPage(page) {
 
 function hrefDashboardHome() {
   const url = new URL(window.location.href)
-  url.searchParams.set('layout', 'dashboard')
   url.searchParams.delete('page')
   url.hash = '#dashboard'
   return url.pathname + url.search + url.hash
@@ -207,7 +270,7 @@ function sparklineSvg(points = []) {
   `
 }
 
-function templateNav(layout) {
+function templateNav() {
   const page = getPage()
   return `
     <header class="nav" id="siteNav">
@@ -218,17 +281,11 @@ function templateNav(layout) {
         </a>
         <nav class="nav__links" aria-label="页面导航">
           ${
-            layout === 'classic'
-              ? `<a href="#about">简介</a><a href="#research">研究与分析</a><a href="#visual">视觉</a>`
-              : page
-                ? `<a href="${hrefDashboardHome()}">能力盘</a><a href="${hrefWithPage('research')}">研究</a><a href="${hrefWithPage('visual')}">视觉</a>`
-                : `<a href="#home">首页</a><a href="#dashboard">能力盘</a><a href="${hrefWithPage('research')}">研究</a><a href="${hrefWithPage('visual')}">视觉</a>`
+            page
+              ? `<a href="${hrefDashboardHome()}">能力盘</a><a href="${hrefWithPage('research')}">研究</a><a href="${hrefWithPage('visual')}">视觉</a>`
+              : `<a href="#home">首页</a><a href="#dashboard">能力盘</a><a href="${hrefWithPage('research')}">研究</a><a href="${hrefWithPage('visual')}">视觉</a>`
           }
         </nav>
-        <div class="nav__mode">
-          <a class="modeLink ${layout === 'dashboard' ? 'is-active' : ''}" href="${hrefWithLayout('dashboard')}">仪表盘</a>
-          <a class="modeLink ${layout === 'classic' ? 'is-active' : ''}" href="${hrefWithLayout('classic')}">经典长页</a>
-        </div>
         <button class="nav__toggle" id="navToggle" type="button" aria-expanded="false">
           菜单
         </button>
@@ -241,7 +298,7 @@ function templateFooter() {
   return `
     <footer class="footer">
       <div class="container footer__inner">
-        <span>© <span id="year"></span> 你的名字</span>
+        <span>© <span id="year"></span> 能力标签</span>
         <button class="toTop" type="button" id="toTop">返回顶部</button>
       </div>
     </footer>
@@ -285,94 +342,6 @@ function templateVisualSection() {
   `
 }
 
-function templateClassic() {
-  return `
-    <main>
-      <section class="hero container" id="home">
-        <div class="hero__wrap">
-          <div class="hero__grid">
-            <div>
-              <h1 class="hero__title">你好，我是「你的名字」</h1>
-              <p class="hero__subtitle">
-                用研究与分析驱动决策，用 AI 工具提升效率，用设计与内容讲好故事。
-              </p>
-              <ul class="tags" aria-label="性格与关键词">
-                <li class="tag">认真负责</li>
-                <li class="tag">自驱学习</li>
-                <li class="tag">表达清晰</li>
-                <li class="tag">审美在线</li>
-              </ul>
-              <div class="actions">
-                <a class="btn btn--primary" href="#research">先看核心能力</a>
-                <a class="btn" href="#about">了解我</a>
-              </div>
-            </div>
-            <div class="hero__art" role="img" aria-label="个人形象占位图">
-              <div class="hero__artLabel">
-                这里后续可以放：头像 / 一张代表性照片 / 或者你最自豪的作品封面
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <div class="divider divider--check" aria-hidden="true"></div>
-
-      <section class="section container" id="about">
-        <div class="section__head">
-          <h2 class="section__title">简介</h2>
-          <p class="section__desc" id="aboutHeadline">静态内容：性格、优势、技能关键词、方向。</p>
-        </div>
-        <div class="grid">
-          <article class="card">
-            <h3 class="card__title">我是谁</h3>
-            <p class="card__meta">一句话介绍 + 你最想被记住的能力/特质。</p>
-          </article>
-          <article class="card">
-            <h3 class="card__title">我擅长什么</h3>
-            <p class="card__meta">列 3-5 个关键词：研究能力/设计能力/表达能力/协作等。</p>
-          </article>
-        </div>
-        <div style="margin-top: 14px" class="actions" id="contactLinks"></div>
-      </section>
-
-      ${templateResearchDeepDive()}
-
-      <div class="divider divider--check" aria-hidden="true"></div>
-
-      <section class="section container" id="ai">
-        <div class="section__head">
-          <h2 class="section__title">AI 工具应用与创新能力</h2>
-          <p class="section__desc">把流程自动化，把表达产品化。</p>
-        </div>
-        <div class="grid" id="aiGrid"></div>
-      </section>
-
-      <div class="divider divider--check" aria-hidden="true"></div>
-
-      <section class="section container" id="pm">
-        <div class="section__head">
-          <h2 class="section__title">项目管理与执行力</h2>
-          <p class="section__desc">目标拆解、推进节奏、风险控制与复盘。</p>
-        </div>
-        <div class="grid" id="pmGrid"></div>
-      </section>
-
-      <div class="divider divider--check" aria-hidden="true"></div>
-
-      <section class="section container" id="content">
-        <div class="section__head">
-          <h2 class="section__title">内容策划与品牌传播</h2>
-          <p class="section__desc">受众、信息层级、传播路径与效果。</p>
-        </div>
-        <div class="grid" id="contentGrid"></div>
-      </section>
-
-      ${templateVisualSection()}
-    </main>
-  `
-}
-
 function templateDashboard() {
   return `
     <main>
@@ -401,21 +370,19 @@ function templateDashboard() {
       <section class="dashboard container" id="dashboard">
         <div class="section__head">
           <h2 class="section__title">能力概览盘</h2>
-          <p class="section__desc">Bento Grid：把能力当作一个控制面板来呈现。</p>
         </div>
 
         <div class="bento" id="bento">
           <article class="tile tile--profile" id="tileProfile">
-            <div class="tile__title">Profile</div>
+            <div class="tileProfile__name tileProfile__name--title" id="tileName">cwy是这样</div>
             <div class="tile__body">
-              <div class="tileProfile__name" id="tileName">你的名字</div>
               <div class="tileProfile__tags" id="tileTags"></div>
               <div class="tileProfile__links actions" id="tileLinks"></div>
             </div>
           </article>
 
           <article class="tile tile--research" id="tileResearch">
-            <div class="tile__title">A. 研究与分析（核心）</div>
+            <div class="tile__title">A. 研究与分析能力</div>
             <div class="tile__body">
               <div class="kpi">
                 <div class="kpi__label" id="researchKpiLabel">案例结论</div>
@@ -431,7 +398,7 @@ function templateDashboard() {
           </article>
 
           <article class="tile tile--ai" id="tileAi">
-            <div class="tile__title">B. AI 工具应用与创新</div>
+            <div class="tile__title">B. AI 工具应用与创新能力</div>
             <div class="tile__body">
               <div class="aiHeadline" id="aiHeadline"></div>
               <div class="aiSub" id="aiSub"></div>
@@ -499,10 +466,11 @@ function templateSecondary(page) {
   if (page === 'research') {
     return templatePageShell({
       title: '研究与分析能力',
-      desc: '论文式呈现：Abstract、Keywords、Figures、分段高亮与阅读进度。',
+      desc: 'Bento Grid 模块化：置顶案例 2x2 + 项目卡片 + 功能卡片；点击卡片用侧边抽屉查看详情。',
       bodyHtml: `
-        <div id="paper"></div>
-        ${templateResearchDeepDive()}
+        <section class="researchBentoWrap container">
+          <div class="researchBento" id="researchBento"></div>
+        </section>
       `
     })
   }
@@ -564,13 +532,12 @@ function templateSecondary(page) {
   return templateDashboard()
 }
 
-const layout = getLayout()
 const page = getPage()
 
 app.innerHTML = `
   <div class="page" id="top">
-    ${templateNav(layout)}
-    ${layout === 'classic' ? templateClassic() : page ? templateSecondary(page) : templateDashboard()}
+    ${templateNav()}
+    ${page ? templateSecondary(page) : templateDashboard()}
     ${templateFooter()}
   </div>
 `
@@ -633,12 +600,7 @@ loadContent()
     // 联系方式放在简介区（按钮形式）
     const contactLinks = document.querySelector('#contactLinks')
     if (contactLinks && Array.isArray(data?.site?.contacts)) {
-      contactLinks.innerHTML = data.site.contacts
-        .map(
-          (c) =>
-            `<a class="btn" href="${escapeHtml(c.href)}" target="_blank" rel="noreferrer">${escapeHtml(c.label)}</a>`
-        )
-        .join('')
+      contactLinks.innerHTML = renderContacts(data.site.contacts)
     }
 
     // About 两张卡
@@ -778,8 +740,8 @@ loadContent()
       renderGallery('#visualGrid', caps.visual?.gallery)
     }
 
-    // ===== Dashboard 绑定（仅 dashboard 模式存在）=====
-    if (layout === 'dashboard') {
+    // ===== Dashboard 绑定（默认首页存在）=====
+    {
       const hero = data?.hero
       const heroSlogan = document.querySelector('#heroSlogan')
       if (heroSlogan && hero?.slogan) heroSlogan.textContent = String(hero.slogan)
@@ -790,7 +752,7 @@ loadContent()
 
       const heroPhoto = document.querySelector('#heroPhoto')
       if (heroPhoto instanceof HTMLImageElement) {
-        heroPhoto.src = hero?.photo || '/assets/avatars/portrait-placeholder.svg'
+        heroPhoto.src = withBase(hero?.photo || '/assets/avatars/portrait-placeholder.svg')
       }
 
       const heroCta = document.querySelector('#heroCta')
@@ -798,7 +760,7 @@ loadContent()
         heroCta.innerHTML = hero.cta
           .map((c, i) => {
             const cls = i === 0 ? 'btn btn--primary' : 'btn'
-            return `<a class="${cls}" href="${escapeHtml(c.href)}">${escapeHtml(c.label)}</a>`
+            return `<a class="${cls}" href="${escapeHtml(withBase(c.href))}">${escapeHtml(c.label)}</a>`
           })
           .join('')
       }
@@ -813,12 +775,7 @@ loadContent()
 
       const tileLinks = document.querySelector('#tileLinks')
       if (tileLinks && Array.isArray(data?.site?.contacts)) {
-        tileLinks.innerHTML = data.site.contacts
-          .map(
-            (c) =>
-              `<a class="btn" href="${escapeHtml(c.href)}" target="_blank" rel="noreferrer">${escapeHtml(c.label)}</a>`
-          )
-          .join('')
+        tileLinks.innerHTML = renderContacts(data.site.contacts)
       }
 
       const dash = data?.dashboard
@@ -843,7 +800,7 @@ loadContent()
         const strip = document.querySelector('#aiStrip')
         if (strip && Array.isArray(dash.ai.demoImages)) {
           strip.innerHTML = dash.ai.demoImages
-            .map((src) => `<img src="${escapeHtml(src)}" alt="" loading="lazy" />`)
+            .map((src) => `<img src="${escapeHtml(withBase(src))}" alt="" loading="lazy" />`)
             .join('')
         }
       }
@@ -898,13 +855,117 @@ loadContent()
             .slice(0, 3)
             .map(
               (src) => `
-                <button class="imgBtn cover" type="button" data-img="${escapeHtml(src)}" data-alt="cover" data-caption="作品封面">
-                  <img src="${escapeHtml(src)}" alt="cover" loading="lazy" />
+                <button class="imgBtn cover" type="button" data-img="${escapeHtml(withBase(src))}" data-alt="cover" data-caption="作品封面">
+                  <img src="${escapeHtml(withBase(src))}" alt="cover" loading="lazy" />
                 </button>
               `
             )
             .join('')
         }
+      }
+    }
+
+    // ===== Research secondary page (Bento + Drawer) =====
+    const pageNow = getPage()
+    if (pageNow === 'research') {
+      const bento = document.querySelector('#researchBento')
+      const r = caps?.research
+      if (bento && r) {
+        // 规则：只保留「超级卡 + 功能卡」，并且每个项目都拥有一组（不再有“置顶”特殊处理）
+        const methods = Array.isArray(r.methods) ? r.methods : []
+        const tools = Array.isArray(r.tools) ? r.tools : []
+
+        // 用现有数据拼成项目列表：featured + timeline
+        const featuredCase = r.featured
+          ? {
+              kind: 'featured',
+              title: r.featured.title,
+              meta: r.featured.meta,
+              abstract: r.featured.abstract ?? r.featured.desc,
+              keywords: r.featured.keywords,
+              figures: r.featured.figures,
+              sections: r.featured.sections,
+              links: r.featured.links
+            }
+          : null
+
+        const timelineCases = Array.isArray(r.timeline)
+          ? r.timeline.map((p) => ({
+              kind: 'timeline',
+              title: p.title,
+              meta: p.meta,
+              year: p.year ?? (String(p.meta ?? '').match(/(20\\d{2})/)?.[1] ?? ''),
+              metric: p.metric,
+              desc: p.desc,
+              outputs: p.outputs,
+              links: p.links
+            }))
+          : []
+
+        const cases = [featuredCase, ...timelineCases].filter(Boolean)
+
+        const figPlaceholder = '/assets/research/figure-placeholder.svg'
+
+        const caseBlocks = cases
+          .map((c, idx) => {
+            const abstract = String(c.abstract ?? c.desc ?? '')
+            const absShort = abstract.length > 140 ? abstract.slice(0, 140) + '…' : abstract
+            const fig0 =
+              Array.isArray(c.figures) && c.figures[0]?.image
+                ? c.figures[0].image
+                : figPlaceholder
+
+            const year = c.year ?? (String(c.meta ?? '').match(/(20\\d{2})/)?.[1] ?? '')
+            const metric = c.metric ?? (c.kind === 'featured' ? '重点案例' : '研究项目')
+
+            const superCard = `
+              <article class="rTile rTile--super" data-drawer-kind="case" data-case-idx="${idx}">
+                <div class="rSuper">
+                  <div class="rSuper__fig">
+                    <img src="${escapeHtml(withBase(fig0))}" alt="Figure" loading="lazy" />
+                  </div>
+                  <div class="rSuper__abs">
+                    <div class="rTile__kicker">超级卡片</div>
+                    <div class="rTile__title">${escapeHtml(c.title ?? '')}</div>
+                    <div class="rTile__meta">${escapeHtml(c.meta ?? '')}</div>
+                    <div class="rAbsP">${escapeHtml(absShort || '点击查看完整摘要与过程。')}</div>
+                    <div class="actions">
+                      <span class="btn btn--primary" style="pointer-events:none">点击展开详情</span>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            `
+
+            const funcCard = `
+              <article class="rTile rTile--funcTall" data-drawer-kind="case" data-case-idx="${idx}">
+                <div class="rTile__inner">
+                  <div class="rTile__kicker">功能卡</div>
+                  <div class="rTile__title">${escapeHtml(year ? `${year}｜${metric}` : metric)}</div>
+                  <div class="rTile__meta">方法</div>
+                  <div>${renderTagList(methods)}</div>
+                  <div class="rTile__meta" style="margin-top: 2px">工具</div>
+                  <div>${renderTagList(tools)}</div>
+                  <div class="rTile__meta">点击查看详情</div>
+                </div>
+              </article>
+            `
+
+            return `
+              <section class="rGroup" aria-label="研究项目组">
+                <div class="rGroup__grid">
+                  ${superCard}
+                  ${funcCard}
+                </div>
+              </section>
+            `
+          })
+          .join('')
+
+        bento.innerHTML = caseBlocks
+
+        // 绑定 drawer 数据到 bento 元素，供点击时取用
+        bento.dataset.drawer = JSON.stringify({ cases })
       }
     }
 
@@ -924,4 +985,108 @@ document.addEventListener('click', (e) => {
   const src = btn.dataset.img
   if (!src) return
   openModal({ src, alt: btn.dataset.alt, caption: btn.dataset.caption })
+})
+
+// Research Bento：点击卡片打开侧边抽屉（事件委托）
+document.addEventListener('click', (e) => {
+  const target = e.target
+  const tile = target instanceof HTMLElement ? target.closest('.rTile') : null
+  if (!(tile instanceof HTMLElement)) return
+
+  const bento = tile.closest('#researchBento')
+  if (!(bento instanceof HTMLElement)) return
+
+  let payload
+  try {
+    payload = JSON.parse(bento.dataset.drawer || '{}')
+  } catch {
+    payload = {}
+  }
+
+  const kind = tile.dataset.drawerKind
+  if (!kind) return
+
+  const tagBlock = (title, items) =>
+    `<div class="drawerBlock"><h3 class="drawerH">${escapeHtml(title)}</h3>${renderTagList(items)}</div>`
+
+  if (kind === 'case') {
+    const idx = Number(tile.dataset.caseIdx)
+    const c = Array.isArray(payload.cases) ? payload.cases[idx] : null
+    if (!c) return
+
+    // featured 类型：走论文式详情；timeline 类型：走项目摘要+产出
+    if (c.kind === 'featured') {
+      const keywords = Array.isArray(c.keywords) ? c.keywords : []
+      const figures = Array.isArray(c.figures) ? c.figures : []
+      const sections = Array.isArray(c.sections) ? c.sections : []
+      openDrawer({
+        title: c.title || '研究案例',
+        html: `
+          <div class="drawerBlock">
+            <h3 class="drawerH">${escapeHtml(c.title ?? '')}</h3>
+            <p class="drawerP">${escapeHtml(c.meta ?? '')}</p>
+          </div>
+          <div class="drawerBlock">
+            <h3 class="drawerH">Abstract</h3>
+            <p class="drawerP">${escapeHtml(c.abstract ?? '')}</p>
+          </div>
+          ${keywords.length ? `<div class="drawerBlock"><h3 class="drawerH">Keywords</h3>${renderTagList(keywords)}</div>` : ''}
+          ${
+            figures.length
+              ? `<div class="drawerBlock">
+                   <h3 class="drawerH">Figures</h3>
+                   ${figures
+                     .map(
+                       (fig) => `
+                         <button class="imgBtn" type="button"
+                           data-img="${escapeHtml(fig.image ?? '')}"
+                           data-alt="${escapeHtml(fig.title ?? 'Figure')}"
+                           data-caption="${escapeHtml(fig.caption ?? '')}">
+                           <img src="${escapeHtml(fig.image ?? '')}" alt="${escapeHtml(fig.title ?? 'Figure')}" loading="lazy" style="width:100%; height: 220px; object-fit: contain; border-radius: 12px; border: 1px solid rgba(43,32,24,0.12); background: rgba(255,250,241,0.92)" />
+                         </button>
+                         <div class="drawerP" style="margin-top: 8px">${escapeHtml(fig.title ?? '')}</div>
+                         <div class="drawerP" style="color: rgba(108,90,77,0.92)">${escapeHtml(fig.caption ?? '')}</div>
+                       `
+                     )
+                     .join('')}
+                 </div>`
+              : ''
+          }
+          ${
+            sections.length
+              ? sections
+                  .map((s) => {
+                    const bullets = Array.isArray(s.bullets) ? s.bullets : []
+                    return `
+                      <div class="drawerBlock">
+                        <h3 class="drawerH">${escapeHtml(s.heading ?? '')}</h3>
+                        ${s.text ? `<p class="drawerP">${escapeHtml(s.text)}</p>` : ''}
+                        ${bullets.length ? `<ul class="drawerList">${bullets.map((b) => `<li>${escapeHtml(b)}</li>`).join('')}</ul>` : ''}
+                      </div>
+                    `
+                  })
+                  .join('')
+              : ''
+          }
+          ${renderLinks(c.links)}
+        `
+      })
+      return
+    }
+
+    const outputs = Array.isArray(c.outputs) ? c.outputs : []
+    openDrawer({
+      title: c.title || '研究项目',
+      html: `
+        <div class="drawerBlock">
+          <h3 class="drawerH">${escapeHtml(c.title ?? '')}</h3>
+          <p class="drawerP">${escapeHtml(c.meta ?? '')}</p>
+          ${c.metric ? `<p class="drawerP" style="margin-top: 6px"><strong>${escapeHtml(c.metric)}</strong></p>` : ''}
+        </div>
+        ${c.desc ? `<div class="drawerBlock"><h3 class="drawerH">摘要</h3><p class="drawerP">${escapeHtml(c.desc)}</p></div>` : ''}
+        ${outputs.length ? `<div class="drawerBlock"><h3 class="drawerH">产出</h3>${renderTagList(outputs)}</div>` : ''}
+        ${renderLinks(c.links)}
+      `
+    })
+  }
 })

@@ -13,14 +13,9 @@ npm.cmd run dev
 
 打开终端提示的本地地址即可预览。
 
-## 两套版式（已保留）
+## 版式
 
-- **仪表盘版（默认）**：在首页加 `?layout=dashboard`
-- **经典长页版（之前那套，已保留）**：在首页加 `?layout=classic`
-
-示例（本地开发服务启动后）：\n
-- `http://127.0.0.1:5173/Wenyu-Cai/?layout=dashboard`
-- `http://127.0.0.1:5173/Wenyu-Cai/?layout=classic`
+当前仅保留 **仪表盘版**（默认）。
 
 ## 我该改哪里（更新内容最简单）
 

@@ -1,23 +1,22 @@
 {
   "site": {
-    "title": "我的作品集",
-    "name": "你的名字",
+    "title": "蔡文煜的作品集",
     "tagline": "用研究与分析驱动决策，用 AI 工具提升效率，用设计与内容讲好故事。",
     "description": "个人作品集：个人简介 + 五大能力（研究与分析、AI 工具应用、项目管理、内容策划与传播、视觉设计与创意）。",
     "contacts": [
-      { "label": "GitHub", "href": "https://github.com/你的用户名" },
-      { "label": "邮箱", "href": "mailto:xxx@xxx.com" }
+      { "label": "电话", "href": "19012723361" },
+      { "label": "邮箱", "href": "cwystudent@163.com" }
     ],
-    "personalityTags": ["认真负责", "自驱学习", "表达清晰", "审美在线"]
+    "personalityTags": ["自驱学习","文字功底", "适应能力","组织规划", "交流沟通","团队合作","表达清晰","乐观积极","认真严谨","技能全面", "审美在线"]
   },
   "hero": {
     "slogan": "连接数据与创意的复合型构建者",
     "sloganEn": "Bridging data & creativity",
     "bio": "我擅长把复杂问题拆解成可验证的假设，用研究与分析得出结论，再用 AI 工具与项目管理把方案落地，并通过内容与视觉把它讲清楚、讲好看。",
-    "photo": "/assets/avatars/portrait-placeholder.svg",
+    "photo": "/assets/avatars/个人简介图片.png?v=20260106",
     "cta": [
       { "label": "查看我的作品", "href": "#dashboard" },
-      { "label": "下载简历（PDF）", "href": "/assets/resume/resume.pdf" }
+      { "label": "下载文字简历（PDF）", "href": "/assets/resume/resume.pdf" }
     ]
   },
   "dashboard": {
@@ -26,8 +25,8 @@
       "sparkline": [6, 8, 9, 7, 10, 12, 11, 13, 14, 16, 15, 18]
     },
     "ai": {
-      "headline": "用 Midjourney + GPT-4 缩短 80% 原型设计时间",
-      "sub": "从需求 → 结构 → 文案 → 视觉 → Demo 的一体化工作流",
+      "headline": "Cursor + Gemini + GPT ，缩短 80% 数据处理与图形绘制时间",
+      "sub": "需求→ 分解 → vibe coding → 数据 → 可视化 → Demo ",
       "highlights": ["Prompt 模板库", "自动化产出", "可复用工作流"],
       "demoImages": ["/assets/ps/placeholder.svg", "/assets/ps/placeholder.svg"]
     },
@@ -67,6 +66,7 @@
     "research": {
       "title": "研究与分析能力",
       "desc": "核心板块：从问题定义、方法设计到结论表达，强调可复用与可验证。",
+      "tools": ["SPSS", "Python", "Excel", "Figma", "Notion"],
       "featured": {
         "title": "代表性研究案例（置顶）",
         "meta": "2024｜方向：XXX｜角色：XXX",
@@ -108,6 +108,8 @@
       "timeline": [
         {
           "title": "研究项目示例 A",
+          "year": "2024",
+          "metric": "转化率 +20%",
           "meta": "2023-2024｜方向：XXX｜角色：XXX",
           "desc": "一句话概括研究问题、方法与结论。",
           "outputs": ["论文：题目/会议（可选）", "海报/报告（可选）"],
