@@ -7,7 +7,7 @@
       { "label": "电话", "href": "19012723361" },
       { "label": "邮箱", "href": "cwystudent@163.com" }
     ],
-    "personalityTags": ["自驱学习", "接受能力强","组织规划", "交流沟通","团队合作","表达清晰","乐观积极","认真严谨","技能全面", "审美在线"]
+    "personalityTags": ["自驱学习","文字功底", "适应能力","组织规划", "交流沟通","团队合作","表达清晰","乐观积极","认真严谨","技能全面", "审美在线"]
   },
   "hero": {
     "slogan": "连接数据与创意的复合型构建者",
@@ -25,8 +25,8 @@
       "sparkline": [6, 8, 9, 7, 10, 12, 11, 13, 14, 16, 15, 18]
     },
     "ai": {
-      "headline": "用 Midjourney + GPT-4 缩短 80% 原型设计时间",
-      "sub": "从需求 → 结构 → 文案 → 视觉 → Demo 的一体化工作流",
+      "headline": "Cursor + Gemini + GPT ，缩短 80% 数据处理与图形绘制时间",
+      "sub": "需求→ 分解 → vibe coding → 数据 → 可视化 → Demo ",
       "highlights": ["Prompt 模板库", "自动化产出", "可复用工作流"],
       "demoImages": ["/assets/ps/placeholder.svg", "/assets/ps/placeholder.svg"]
     },
