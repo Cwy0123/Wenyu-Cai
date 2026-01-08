@@ -21,8 +21,7 @@
   },
   "dashboard": {
     "research": {
-      "kpi": { "label": "论文录用", "value": "2篇", "note": "主持项目与竞赛3项"
-               "label": "专利授权", "value": "1项", "note": "主持项目与竞赛3项" },
+      "kpi": { "label": "论文录用", "value": "2篇", "note": "主持项目与竞赛3项" },
       "sparkline": [6, 8, 9, 7, 10, 12, 11, 13, 14, 16, 15, 18],
       "image": "/assets/research/research-cover.svg"
     },
