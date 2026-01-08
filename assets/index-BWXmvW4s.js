@@ -27,7 +27,7 @@
       <div class="actions">
         ${r.map(n=>`<a class="btn" href="${M(vu(n.href))}" target="_blank" rel="noreferrer">${M(n.label)}</a>`).join("")}
       </div>
-    `:"";return t+i}async function yu(){const a=await fetch(new URL("/Wenyu-Cai/assets/content-EKWBqsFm.json",import.meta.url));if(!a.ok)throw new Error(`Failed to load content.json: ${a.status}`);return await a.json()}function M(a){return String(a).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;")}function un(a=[]){return!Array.isArray(a)||a.length===0?"":`
+    `:"";return t+i}async function yu(){const a=await fetch(new URL("/Wenyu-Cai/assets/content-CAo0QjHN.json",import.meta.url));if(!a.ok)throw new Error(`Failed to load content.json: ${a.status}`);return await a.json()}function M(a){return String(a).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;")}function un(a=[]){return!Array.isArray(a)||a.length===0?"":`
     <div class="actions" style="margin-top: 12px">
       ${a.map(e=>`<a class="btn" href="${M(Vt(e.href))}" target="_blank" rel="noreferrer">${M(e.label)}</a>`).join("")}
     </div>
