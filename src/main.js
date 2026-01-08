@@ -385,15 +385,9 @@ function templateDashboard() {
             <div class="tile__title">A. 研究与分析能力</div>
             <div class="tile__body tile__body--split">
               <div class="tile__left">
-                <div class="kpi">
-                  <div class="kpi__label" id="researchKpiLabel">案例结论</div>
-                  <div class="kpi__value" id="researchKpiValue">+18.6%</div>
-                  <div class="kpi__note" id="researchKpiNote">示例：关键指标提升</div>
-                </div>
-                <div class="sparkWrap" id="researchSpark"></div>
-                <div class="actions">
+                <div class="researchStats" id="researchStats"></div>
+                <div class="actions actions--bottom">
                   <a class="btn btn--primary" href="${hrefWithPage('research')}">查看详情</a>
-                  <a class="btn" href="${hrefWithPage('research')}#paper">快速导览</a>
                 </div>
               </div>
               <div class="tile__right">
@@ -785,14 +779,21 @@ loadContent()
 
       const dash = data?.dashboard
       if (dash?.research) {
-        const kpiLabel = document.querySelector('#researchKpiLabel')
-        const kpiValue = document.querySelector('#researchKpiValue')
-        const kpiNote = document.querySelector('#researchKpiNote')
-        if (kpiLabel) kpiLabel.textContent = String(dash.research.kpi?.label ?? '案例结论')
-        if (kpiValue) kpiValue.textContent = String(dash.research.kpi?.value ?? '')
-        if (kpiNote) kpiNote.textContent = String(dash.research.kpi?.note ?? '')
-        const spark = document.querySelector('#researchSpark')
-        if (spark) spark.innerHTML = sparklineSvg(dash.research.sparkline)
+        // 渲染研究统计行
+        const statsContainer = document.querySelector('#researchStats')
+        if (statsContainer && Array.isArray(dash.research.statRows)) {
+          statsContainer.innerHTML = dash.research.statRows.map(row => `
+            <div class="researchStatRow">
+              ${row.map((s, i) => `
+                ${i > 0 ? '<span class="researchStat__sep">，</span>' : ''}
+                <span class="researchStat">
+                  <span class="researchStat__label">${escapeHtml(s.label)}</span><span class="researchStat__action">${escapeHtml(s.action)}</span>
+                  <span class="researchStat__value">${escapeHtml(s.value)}</span><span class="researchStat__unit">${escapeHtml(s.unit)}</span>
+                </span>
+              `).join('')}
+            </div>
+          `).join('')
+        }
         const coverImg = document.querySelector('#researchCoverImg')
         if (coverImg && dash.research.image) {
           coverImg.src = withBase(dash.research.image)

@@ -461,7 +461,7 @@ a:hover {
 
 /* ===== Capability Dashboard (Bento Grid) ===== */
 .dashboard {
-  padding: 40px 0 28px;
+  padding: 20px 0 28px;
 }
 
 .bento {
@@ -518,6 +518,13 @@ a:hover {
 .tile__left {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.actions--bottom {
+  margin-top: auto;
+  padding-top: 16px;
 }
 
 .tile__right {
@@ -579,6 +586,54 @@ a:hover {
   margin-top: 6px;
   font-size: 12.5px;
   color: rgba(108, 90, 77, 0.92);
+}
+
+/* Research stats rows */
+.researchStats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.researchStatRow {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.researchStat {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+  font-size: 17px;
+  color: rgba(108, 90, 77, 0.85);
+}
+
+.researchStat__sep {
+  color: rgba(108, 90, 77, 0.6);
+  margin: 0 2px;
+}
+
+.researchStat__label {
+  font-weight: 700;
+  color: #5a4a3a;
+}
+
+.researchStat__action {
+  margin-right: 4px;
+}
+
+.researchStat__value {
+  font-family: var(--font_display);
+  font-size: 28px;
+  font-weight: 600;
+  color: #5a4a3a;
+  line-height: 1;
+  margin: 0 2px;
+}
+
+.researchStat__unit {
+  color: rgba(108, 90, 77, 0.85);
 }
 
 .sparkWrap {
