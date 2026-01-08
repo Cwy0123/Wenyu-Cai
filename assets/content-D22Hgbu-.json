@@ -32,10 +32,21 @@
         ],
         [
           { "label": "项目", "action": "主持或参与", "value": "6", "unit": "项" }
+        ],
+        [
+          {   "label": "-", "action": "其中国社科重大项目", "value": "1", "unit": "项" }
         ]
       ],
-      "sparkline": [6, 8, 9, 7, 10, 12, 11, 13, 14, 16, 15, 18],
-      "image": "/assets/research/research-cover.svg"
+      "pieChart": {
+        "title": "研究与分析成果概览",
+        "slices": [
+          { "label": "论文发表", "value": 2, "unit": "篇", "icon": "📄" },
+          { "label": "竞赛获奖", "value": 7, "unit": "项", "icon": "🏆" },
+          { "label": "专著参与", "value": 2, "unit": "部", "icon": "📚" },
+          { "label": "案例入库", "value": 1, "unit": "篇", "icon": "💼" },
+          { "label": "项目经验", "value": 6, "unit": "项", "icon": "📋" }
+        ]
+      }
     },
     "ai": {
       "headline": "Cursor + Gemini + GPT ，缩短 80% 数据处理与图形绘制时间",
