@@ -7,7 +7,7 @@
       { "label": "电话", "href": "19012723361" },
       { "label": "邮箱", "href": "cwystudent@163.com" }
     ],
-    "personalityTags": ["自驱学习","文字功底", "适应能力","组织规划", "交流沟通","团队合作","表达清晰","乐观积极","认真严谨","技能全面", "审美在线"]
+    "personalityTags": ["浙江工商大学","2026届研究生", "GPA rank1","研究生一等奖学金*2", "校优秀研究生","校优秀毕业生","校优秀共青团员","校优秀学生干部","认真严谨","技能全面", "审美在线"]
   },
   "hero": {
     "slogan": "连接数据与创意的复合型构建者",
@@ -21,7 +21,19 @@
   },
   "dashboard": {
     "research": {
-      "kpi": { "label": "论文录用", "value": "2篇", "note": "主持项目与竞赛3项" },
+      "statRows": [
+        [
+          { "label": "论文", "action": "发表", "value": "2", "unit": "篇" },
+          { "label": "竞赛", "action": "获奖", "value": "7", "unit": "项" }
+        ],
+        [
+          { "label": "专著", "action": "参与", "value": "2", "unit": "部" },
+          { "label": "案例", "action": "入库", "value": "1", "unit": "篇" }
+        ],
+        [
+          { "label": "项目", "action": "主持或参与", "value": "6", "unit": "项" }
+        ]
+      ],
       "sparkline": [6, 8, 9, 7, 10, 12, 11, 13, 14, 16, 15, 18],
       "image": "/assets/research/research-cover.svg"
     },
