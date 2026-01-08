@@ -270,6 +270,94 @@ function sparklineSvg(points = []) {
   `
 }
 
+// 饼状图渲染函数（甜甜圈样式）
+function renderPieChart(config) {
+  if (!config || !Array.isArray(config.slices)) return ''
+  
+  const slices = config.slices
+  const total = slices.reduce((sum, s) => sum + s.value, 0)
+  // 按图片配色：深褐 → 中褐 → 浅褐 → 米色 → 浅米
+  const colors = ['#8b5a3c', '#a67c5b', '#c49a7a', '#d4b896', '#e8d4b8']
+  const size = 200
+  const cx = size / 2
+  const cy = size / 2
+  const outerR = 82
+  const innerR = 32 // 内圆半径，形成甜甜圈（环宽1.25倍）
+  
+  // 简洁商务白色图标（SVG路径）
+  const icons = {
+    paper: `<path fill="#fff" d="M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6H6zm7 1.5L18.5 9H13V3.5zM8 12h8v2H8v-2zm0 4h8v2H8v-2z"/>`,
+    trophy: `<path fill="#fff" d="M5 3h14v2h-1v2a5 5 0 0 1-3 4.58V14a3 3 0 0 1-3 3h-1a3 3 0 0 1-3-3v-2.42A5 5 0 0 1 5 7V5H4V3h1zm2 2v2a3 3 0 0 0 2.18 2.88L10 10.12V14a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-3.88l.82-.24A3 3 0 0 0 16 7V5H7zM4 7H3a1 1 0 0 0 0 2h1V7zm16 0h1a1 1 0 0 1 0 2h-1V7zM8 19h8v2H8v-2z"/>`,
+    book: `<path fill="#fff" d="M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H6zm0 2h5v8l-2.5-1.5L6 12V4z"/>`,
+    briefcase: `<path fill="#fff" d="M10 2a2 2 0 0 0-2 2v1H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-4V4a2 2 0 0 0-2-2h-4zm0 2h4v1h-4V4zM4 7h16v4H4V7zm0 6h16v5H4v-5z"/>`,
+    clipboard: `<path fill="#fff" d="M9 2a1 1 0 0 0-1 1H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2a1 1 0 0 0-1-1H9zm0 2h6v1H9V4zM6 5h2v1a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V5h2v14H6V5zm2 5v2h8v-2H8zm0 4v2h5v-2H8z"/>`
+  }
+  const iconKeys = ['paper', 'trophy', 'book', 'briefcase', 'clipboard']
+  
+  let startAngle = -90
+  const paths = slices.map((slice, i) => {
+    const angle = (slice.value / total) * 360
+    const endAngle = startAngle + angle
+    const largeArc = angle > 180 ? 1 : 0
+    
+    // 外圆弧
+    const ox1 = cx + outerR * Math.cos((startAngle * Math.PI) / 180)
+    const oy1 = cy + outerR * Math.sin((startAngle * Math.PI) / 180)
+    const ox2 = cx + outerR * Math.cos((endAngle * Math.PI) / 180)
+    const oy2 = cy + outerR * Math.sin((endAngle * Math.PI) / 180)
+    
+    // 内圆弧（反方向）
+    const ix1 = cx + innerR * Math.cos((endAngle * Math.PI) / 180)
+    const iy1 = cy + innerR * Math.sin((endAngle * Math.PI) / 180)
+    const ix2 = cx + innerR * Math.cos((startAngle * Math.PI) / 180)
+    const iy2 = cy + innerR * Math.sin((startAngle * Math.PI) / 180)
+    
+    // 甜甜圈路径
+    const path = `M ${ox1} ${oy1} A ${outerR} ${outerR} 0 ${largeArc} 1 ${ox2} ${oy2} L ${ix1} ${iy1} A ${innerR} ${innerR} 0 ${largeArc} 0 ${ix2} ${iy2} Z`
+    
+    // 图标位置（在环形中间）
+    const midAngle = startAngle + angle / 2
+    const iconR = (outerR + innerR) / 2
+    const iconX = cx + iconR * Math.cos((midAngle * Math.PI) / 180)
+    const iconY = cy + iconR * Math.sin((midAngle * Math.PI) / 180)
+    
+    startAngle = endAngle
+    
+    return { path, color: colors[i % colors.length], slice, iconX, iconY, iconKey: iconKeys[i % iconKeys.length] }
+  })
+  
+  const svgPaths = paths.map((p, i) => `
+    <g class="pieSlice" data-index="${i}">
+      <path d="${p.path}" fill="${p.color}" class="pieSlice__path" />
+      <g transform="translate(${p.iconX - 10}, ${p.iconY - 10}) scale(0.85)" class="pieSlice__iconG">
+        <svg viewBox="0 0 24 24" width="20" height="20">${icons[p.iconKey]}</svg>
+      </g>
+    </g>
+  `).join('')
+  
+  // 图例使用对应的小色块
+  const legend = slices.map((s, i) => `
+    <li class="pieLegend__item" data-index="${i}">
+      <span class="pieLegend__dot" style="background:${colors[i % colors.length]}"></span>
+      <span class="pieLegend__label">${escapeHtml(s.label)}：</span>
+      <span class="pieLegend__value">${s.value}${escapeHtml(s.unit)}</span>
+      ${s.note ? `<span class="pieLegend__note">（${escapeHtml(s.note)}）</span>` : ''}
+    </li>
+  `).join('')
+  
+  return `
+    <div class="pieChart">
+      <div class="pieChart__title">${escapeHtml(config.title || '')}</div>
+      <div class="pieChart__body">
+        <svg class="pieChart__svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+          ${svgPaths}
+        </svg>
+        <ul class="pieLegend">${legend}</ul>
+      </div>
+    </div>
+  `
+}
+
 function templateNav() {
   const page = getPage()
   return `
@@ -391,7 +479,7 @@ function templateDashboard() {
                 </div>
               </div>
               <div class="tile__right">
-                <img id="researchCoverImg" class="tile__cover" src="" alt="研究封面" loading="lazy" />
+                <div class="pieChartWrap" id="pieChartWrap"></div>
               </div>
             </div>
           </article>
@@ -794,9 +882,30 @@ loadContent()
             </div>
           `).join('')
         }
-        const coverImg = document.querySelector('#researchCoverImg')
-        if (coverImg && dash.research.image) {
-          coverImg.src = withBase(dash.research.image)
+        // 渲染饼状图
+        const pieWrap = document.querySelector('#pieChartWrap')
+        if (pieWrap && dash.research.pieChart) {
+          pieWrap.innerHTML = renderPieChart(dash.research.pieChart)
+          // 图例与扇区联动
+          const legendItems = pieWrap.querySelectorAll('.pieLegend__item')
+          const slices = pieWrap.querySelectorAll('.pieSlice')
+          legendItems.forEach(item => {
+            const idx = item.dataset.index
+            item.addEventListener('mouseenter', () => {
+              slices.forEach((s, i) => {
+                if (String(i) === idx) {
+                  s.classList.add('is-active')
+                } else {
+                  s.classList.add('is-dim')
+                }
+              })
+            })
+            item.addEventListener('mouseleave', () => {
+              slices.forEach(s => {
+                s.classList.remove('is-active', 'is-dim')
+              })
+            })
+          })
         }
       }
 

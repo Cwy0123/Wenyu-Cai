@@ -542,6 +542,126 @@ a:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
 }
 
+/* ===== Pie Chart ===== */
+.pieChartWrap {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pieChart {
+  text-align: center;
+}
+
+.pieChart__title {
+  font-family: "SimHei", "Heiti SC", "Microsoft YaHei", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #5a4a3a;
+  margin-bottom: 14px;
+  letter-spacing: 0.5px;
+}
+
+.pieChart__body {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: flex-start;
+}
+
+.pieChart__svg {
+  flex-shrink: 0;
+}
+
+.pieSlice {
+  cursor: pointer;
+  transition: transform 0.25s ease, filter 0.25s ease;
+  transform-origin: center;
+}
+
+.pieSlice:hover,
+.pieSlice.is-active {
+  transform: scale(1.08);
+  filter: brightness(1.1);
+}
+
+.pieSlice:hover .pieSlice__path,
+.pieSlice.is-active .pieSlice__path {
+  stroke: #fff;
+  stroke-width: 3;
+}
+
+.pieSlice.is-dim {
+  opacity: 0.5;
+}
+
+.pieSlice__path {
+  stroke: #fffaf1;
+  stroke-width: 2;
+  transition: stroke 0.2s ease, stroke-width 0.2s ease;
+}
+
+.pieSlice__iconG {
+  pointer-events: none;
+}
+
+.pieLegend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  font-size: 13px;
+  color: #5a4a3a;
+}
+
+.pieLegend__item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+  transition: background 0.2s ease;
+  border-radius: 4px;
+  cursor: default;
+  white-space: nowrap;
+}
+
+.pieLegend__item:hover {
+  background: rgba(180, 76, 42, 0.08);
+}
+
+.pieLegend__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.pieLegend__label {
+  font-weight: 400;
+}
+
+.pieLegend__value {
+  font-weight: 400;
+  color: #5a4a3a;
+}
+
+.pieLegend__note {
+  font-size: 11px;
+  color: rgba(90, 74, 58, 0.7);
+}
+
+@media (max-width: 600px) {
+  .pieChart__body {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .pieLegend {
+    font-size: 12px;
+  }
+}
+
 @media (max-width: 600px) {
   .tile__body--split {
     flex-direction: column;
@@ -593,6 +713,8 @@ a:hover {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding-left: 8px;
+  padding-top: 6px;
 }
 
 .researchStatRow {
