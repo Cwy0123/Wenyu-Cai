@@ -23,7 +23,7 @@
     "research": {
       "statRows": [
         [
-          { "label": "论文", "action": "发表", "value": "2", "unit": "篇" },
+          { "label": "论文", "action": "录用", "value": "2", "unit": "篇" },
           { "label": "竞赛", "action": "获奖", "value": "7", "unit": "项" }
         ],
         [
@@ -40,7 +40,7 @@
       "pieChart": {
         "title": "研究与分析成果概览",
         "slices": [
-          { "label": "论文发表", "value": 2, "unit": "篇", "icon": "📄" },
+          { "label": "论文录用", "value": 2, "unit": "篇", "icon": "📄" },
           { "label": "竞赛获奖", "value": 7, "unit": "项", "icon": "🏆" },
           { "label": "专著参与", "value": 2, "unit": "部", "icon": "📚" },
           { "label": "案例入库", "value": 1, "unit": "篇", "icon": "💼" },
@@ -92,10 +92,10 @@
       "desc": "核心板块：从问题定义、方法设计到结论表达，强调可复用与可验证。",
       "tools": ["SPSS", "Python", "Excel", "Figma", "Notion"],
       "featured": {
-        "title": "代表性研究案例（置顶）",
-        "meta": "2024｜方向：XXX｜角色：XXX",
-        "abstract": "用 3-5 句话讲清楚：研究问题、研究方法、关键发现、价值与落地。尽量量化：样本量、周期、指标、对比组等。",
-        "keywords": ["问题定义", "方法设计", "数据分析", "结论表达", "可复用"],
+        "title": "“圣奥集团的分配平衡之道”",
+        "meta": "2025｜中国公益慈善案例中心｜角色：第一作者",
+        "abstract": "本案例基于SCALERS框架，系统分析圣奥集团从内部帮扶和外部慈善实践两方面参与共同富裕的实践路径，并总结案例价值，提出了结论与建议。",
+        "keywords": ["企业慈善", "SCALERS框架", "共同富裕"],
         "figures": [
           {
             "title": "Figure 1. 研究框架/流程图",
