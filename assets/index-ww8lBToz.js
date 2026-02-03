@@ -397,7 +397,7 @@
                   <div class="rTile__meta">方法</div>
                   <div>${nr(f)}</div>
                   ${g}
-                  ${P===0?S:""}
+                  ${S}
                 </div>
               </article>
             `;return`
