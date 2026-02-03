@@ -1,4 +1,4 @@
-﻿{
+{
   "site": {
     "title": "蔡文煜的作品集",
     "tagline": "用研究与分析驱动决策，用 AI 工具提升效率，用设计与内容讲好故事。",
@@ -90,7 +90,6 @@
     "research": {
       "title": "研究与分析能力",
       "desc": "核心板块：从问题定义、方法设计到结论表达，强调可复用与可验证。",
-      "tools": ["SPSS", "Python", "Excel", "Figma", "Notion"],
       "featured": {
         "title": "“圣奥集团的分配平衡之道”",
         "meta": "2025｜中国公益慈善案例中心｜角色：第一作者",
@@ -100,7 +99,7 @@
           {
             "title": "Figure 1. 研究框架/流程图",
             "caption": "用一句话解释这张图在讲什么（方法流程、变量关系、研究框架等）。",
-            "image": "/assets/research/figure-placeholder.svg"
+            "image": "/assets/research/jimeng-2026-02-03-3014-物质救助.png"
           }
         ],
         "sections": [
@@ -108,25 +107,8 @@
             "heading": "1. Research Question",
             "text": "背景是什么？为什么这个问题重要？你的研究边界是什么？",
             "bullets": ["研究目标", "假设/问题", "研究范围与限制"]
-          },
-          {
-            "heading": "2. Methodology",
-            "text": "你采用了哪些方法与数据来源？如何保证可靠性与可验证性？",
-            "bullets": ["样本与数据来源", "指标与变量定义", "分析方法与工具"]
-          },
-          {
-            "heading": "3. Key Findings",
-            "text": "关键发现是什么？用数据或证据支撑。最好写成 2-3 条可复述结论。",
-            "bullets": ["发现 1（含证据）", "发现 2（含证据）", "发现 3（可选）"]
-          },
-          {
-            "heading": "4. Implications",
-            "text": "这些发现带来了什么决策建议/落地价值？下一步怎么做？",
-            "bullets": ["建议与落地方案", "风险与边界条件", "后续研究方向"]
           }
-        ],
-        "highlights": ["问题定义：……", "方法：……", "结论：……", "影响：……"],
-        "links": [{ "label": "阅读完整报告", "href": "https://example.com" }]
+        ]
       },
       "methods": ["实地调研", "面对面访谈", "资料整合"],
       "timeline": [
